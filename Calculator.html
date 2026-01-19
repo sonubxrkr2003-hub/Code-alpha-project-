@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Basic Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .calculator {
+      background: #1e1e2f;
+      padding: 20px;
+      border-radius: 16px;
+      width: 320px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .display {
+      background: #111;
+      color: #0f0;
+      font-size: 2rem;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: right;
+      overflow-x: auto;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #2e2e42;
+      color: #fff;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #3e3e5e;
+      transform: translateY(-2px);
+    }
+
+    .operator {
+      background: #ff9f1c;
+      color: #000;
+    }
+
+    .operator:hover {
+      background: #ffb347;
+    }
+
+    .equal {
+      grid-column: span 2;
+      background: #2ec4b6;
+      color: #000;
+    }
+
+    .equal:hover {
+      background: #48d9c8;
+    }
+
+    .clear {
+      background: #e63946;
+    }
+
+    .clear:hover {
+      background: #ff6b6b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="deleteLast()">⌫</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('-')">−</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="equal" onclick="calculate()">=</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="appendNumber('.')">.</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+
+    function appendNumber(num) {
+      if (display.innerText === "0") {
+        display.innerText = num;
+      } else {
+        display.innerText += num;
+      }
+    }
+
+    function appendOperator(op) {
+      const lastChar = display.innerText.slice(-1);
+      if ("+-*/".includes(lastChar)) return;
+      display.innerText += op;
+    }
+
+    function clearDisplay() {
+      display.innerText = "0";
+    }
+
+    function deleteLast() {
+      if (display.innerText.length === 1) {
+        display.innerText = "0";
+      } else {
+        display.innerText = display.innerText.slice(0, -1);
+      }
+    }
+
+    function calculate() {
+      try {
+        display.innerText = eval(display.innerText);
+      } catch {
+        display.innerText = "Error";
+      }
+    }
+
+    // Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if (!isNaN(e.key)) appendNumber(e.key);
+      if (["+", "-", "*", "/"].includes(e.key)) appendOperator(e.key);
+      if (e.key === ".") appendNumber(".");
+      if (e.key === "Enter") calculate();
+      if (e.key === "Backspace") deleteLast();
+      if (e.key === "Escape") clearDisplay();
+    });
+  </script>
+
+</body>
+</html>
